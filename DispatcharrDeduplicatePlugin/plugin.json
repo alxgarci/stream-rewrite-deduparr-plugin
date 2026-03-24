@@ -1,0 +1,32 @@
+{
+  "name": "Stream Rewrite & Deduparr",
+  "version": "0.1.1",
+  "description": "Bulk URL replacement for all stored streams plus duplicate cleanup using M3U source priority.",
+  "author": "alxgarci",
+  "help_url": "https://github.com/alxgarci/stream-rewrite-deduparr-plugin",
+  "fields": [
+    {"id": "mode_info", "type": "info", "label": "Run one or both operations: URL replacement and duplicate cleanup."},
+    {"id": "replace_enabled", "label": "Replace text in stream URLs", "type": "boolean", "default": true},
+    {"id": "find_text", "label": "Text to find", "type": "string", "default": "", "placeholder": "old.domain.tld"},
+    {"id": "replace_text", "label": "Replacement text", "type": "string", "default": "", "placeholder": "new.domain.tld"},
+    {"id": "match_mode", "label": "Replacement mode", "type": "select", "default": "literal", "options": [
+      {"value": "literal", "label": "Literal text"},
+      {"value": "regex", "label": "Regex"}
+    ]},
+    {"id": "dedupe_enabled", "label": "Remove duplicate stream links", "type": "boolean", "default": true},
+    {"id": "priority_m3us", "label": "M3U priority order", "type": "text", "default": "", "placeholder": "Provider A\nProvider B\nProvider C", "help_text": "One M3U source name per line. Earlier entries have higher priority when duplicates are removed."},
+    {"id": "restrict_to_m3us", "label": "Only process these M3Us", "type": "text", "default": "", "placeholder": "Provider A\nProvider B", "help_text": "Optional allowlist. Leave empty to process all M3U sources."},
+    {"id": "normalize_trailing_slash", "label": "Ignore trailing slash when deduplicating", "type": "boolean", "default": true},
+    {"id": "normalize_scheme_case", "label": "Normalize URL scheme/host case", "type": "boolean", "default": true},
+    {"id": "dry_run_mode", "label": "Dry run mode", "type": "boolean", "default": true, "help_text": "Preview only. No DB writes are performed."},
+    {"id": "export_csv", "label": "Write CSV report", "type": "boolean", "default": true},
+    {"id": "timezone", "label": "Timezone", "type": "string", "default": "Europe/Madrid", "placeholder": "Europe/Madrid"},
+    {"id": "schedule_cron", "label": "Cron schedules", "type": "text", "default": "", "placeholder": "0 4 * * *\n30 16 * * 0", "help_text": "One 5-field cron expression per line."}
+  ],
+  "actions": [
+    {"id": "validate_settings", "label": "Validate settings", "description": "Check model compatibility, M3U names and cron expressions."},
+    {"id": "run_selected", "label": "Run selected operations", "description": "Executes replacement and/or duplicate cleanup.", "confirm": {"required": true, "title": "Run plugin?", "message": "This may rewrite URLs and merge/delete duplicate streams."}},
+    {"id": "update_schedule", "label": "Update schedule", "description": "Save settings and restart scheduler."},
+    {"id": "clear_operation_lock", "label": "Clear operation lock", "description": "Remove stale lock file.", "confirm": {"required": true, "title": "Clear lock?", "message": "Only do this if nothing is currently running."}}
+  ]
+}
